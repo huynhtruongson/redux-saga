@@ -1,58 +1,36 @@
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { NotFound, PrivateRoute } from 'components/Common';
+import { AdminLayout } from 'components/Layout';
+import { ConnectedRouter } from 'connected-react-router';
+import LoginPage from 'features/auth/pages/LoginPage';
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { history } from 'utils/history';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    const theme = createTheme()
+    return (
+        <ConnectedRouter history={history}>
+            <CssBaseline/>
+            <ThemeProvider theme={theme}>
+                <Switch>
+                    <Route exact path="/">
+                        <Redirect to="/admin/dashboard" />
+                    </Route>
+                    <Route path='/login'>
+                        <LoginPage />
+                    </Route>
+                    <PrivateRoute path='/admin'>
+                        <AdminLayout />
+                    </PrivateRoute>
+                    <Route>
+                        <NotFound />
+                    </Route>
+                </Switch>
+            </ThemeProvider>
+        </ConnectedRouter>
+    );
 }
 
 export default App;
